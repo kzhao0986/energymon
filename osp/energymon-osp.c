@@ -270,7 +270,6 @@ int energymon_init_osp_polling(energymon* em) {
 #else
 int energymon_init_osp(energymon* em) {
 #endif
-  exit(-1);
   if (em == NULL || em->state != NULL) {
     errno = EINVAL;
     return -1;
@@ -351,7 +350,6 @@ uint64_t energymon_read_total_osp(const energymon* em) {
   state->buf[OSP_BUF_SIZE - 1] = '\0';
   errno = 0;
   wh = strtod((const char*) &state->buf[24], NULL);
-  printf("watt-hours: %lf", wh);
   if (errno) {
     perror("energymon_read_total_osp: strtod");
     return 0;
