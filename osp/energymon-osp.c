@@ -339,6 +339,7 @@ uint64_t energymon_read_total_osp(const energymon* em) {
   }
   energymon_osp* state = (energymon_osp*) em->state;
 #ifdef ENERGYMON_OSP_USE_POLLING
+  printf("wait what the fuck\n");
   return state->total_uj;
 #else
   double wh;
