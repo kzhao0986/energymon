@@ -350,7 +350,6 @@ uint64_t energymon_read_total_osp(const energymon* em) {
   state->buf[OSP_BUF_SIZE - 1] = '\0';
   errno = 0;
   wh = strtod((const char*) &state->buf[24], NULL);
-  printf("watt-hour: %lf\n", wh);
   if (errno) {
     perror("energymon_read_total_osp: strtod");
     return 0;
