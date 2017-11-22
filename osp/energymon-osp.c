@@ -270,6 +270,7 @@ int energymon_init_osp_polling(energymon* em) {
 #else
 int energymon_init_osp(energymon* em) {
 #endif
+  exit(-1);
   if (em == NULL || em->state != NULL) {
     errno = EINVAL;
     return -1;
@@ -333,7 +334,6 @@ uint64_t energymon_read_total_osp_polling(const energymon* em) {
 #else
 uint64_t energymon_read_total_osp(const energymon* em) {
 #endif
-  exit(-1);
   if (em == NULL || em->state == NULL) {
     errno = EINVAL;
     return 0;
