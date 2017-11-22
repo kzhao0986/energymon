@@ -333,7 +333,7 @@ uint64_t energymon_read_total_osp_polling(const energymon* em) {
 #else
 uint64_t energymon_read_total_osp(const energymon* em) {
 #endif
-  printf("wait what the fuck\n");
+  exit(-1);
   if (em == NULL || em->state == NULL) {
     errno = EINVAL;
     return 0;
