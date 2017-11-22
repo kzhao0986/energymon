@@ -102,6 +102,7 @@ typedef struct energymon_osp {
 #else
   uint64_t overflow_surplus;
   unsigned int n_overflow;
+  double max_watts;
 #endif
 } energymon_osp;
 
@@ -325,6 +326,7 @@ int energymon_init_osp(energymon* em) {
   }
 #endif
 
+  state->max_watts = 0;
   return 0;
 }
 
@@ -342,6 +344,7 @@ uint64_t energymon_read_total_osp(const energymon* em) {
   return state->total_uj;
 #else
   double wh;
+  double watts;
   if (em_osp_request_data_retry(state, ENERGYMON_OSP_RETRIES)) {
     perror("energymon_read_total_osp: em_osp_request_data_retry");
     return 0;
@@ -350,9 +353,13 @@ uint64_t energymon_read_total_osp(const energymon* em) {
   state->buf[OSP_BUF_SIZE - 1] = '\0';
   errno = 0;
   wh = strtod((const char*) &state->buf[24], NULL);
+  watts = strtod((const char*) &state->buf[17], NULL);
   if (errno) {
     perror("energymon_read_total_osp: strtod");
     return 0;
+  }
+  if (watts > state->max_watts) {
+    state->max_watts = watts;
   }
   if (wh >= OSP_WATTHOUR_MAX) {
 #ifdef VERBOSE
@@ -386,10 +393,13 @@ int energymon_finish_osp_polling(energymon* em) {
 #else
 int energymon_finish_osp(energymon* em) {
 #endif
+  energymon_osp* state = (energymon_osp*) em->state;
+
   if (em == NULL || em->state == NULL) {
     errno = EINVAL;
     return -1;
   }
+  printf("max watts: %lf\n", state->max_watts);
   return em_osp_finish(em, 0);
 }
 
